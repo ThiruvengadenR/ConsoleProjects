@@ -1,0 +1,17 @@
+Rollno ,Name,Role,Gender,Degree,CGPA,IsEmployee,YearOfPassedOut,Location
+101,Thiru ,Student,Male,B.E,6.56,f,2023-05-20,Thiruvarur
+102,Vanaja ,Student,Female,B.E,7.56,f,2021-05-16,US
+103,Viji,Student,Female,MCA,7.25,f,2019-05-13,Chennai
+104,Subin,Student,Male,B.E,7.83,t,2017-05-09,Kanyakumari
+105,Dinesh,Student,Male,B.E,7.56,f,2022-06-08,Chidambaram
+106,Sridhar,Student,Male,B.E,8.56,f,2021-07-25,Kumbakonam
+107,Elayaraja,Student,Male,MCA,8.25,t,2020-09-10,Chennai
+108,Rajendran,Student,Male,MSC,8.83,t,2019-10-28,Thajore
+109,Logesh,Admin,Male,B.E,8.56,t,2018-12-14,Chennai
+110,Jyothi,Admin,Female,MSC,9.56,t,2018-01-30,Kachipuram
+111,Prithiviraj,Trainer,Male,MCA,9.25,t,2017-03-18,Chennai
+112,Siva,Trainer,Male,MCA,9.83,t,2016-05-04,Chennai
+113,Muthuramalingam,Founder,Male,B.E,7.96,t,2015-06-21,Chennai
+114,Habib,HR,Male,B.E,6.71,t,2014-08-07,Chennai
+115,Bala Lingeswari,HR,Female,B.E,7.46,t,2013-09-23,Chennai
+116,Pradheep Kumar,Trainer,Male,B.E,8.21,t,2012-11-09,Chennai

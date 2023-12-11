@@ -1,0 +1,1246 @@
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgres
+[sudo] password for gods:           
+postgres@gods-Nitro-AN515-57:~$ psql
+psql (14.9 (Ubuntu 14.9-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | postgres | UTF8     | en_IN   | en_IN | 
+ template0 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ thiru     | postgres | UTF8     | en_IN   | en_IN | 
+(4 rows)
+
+postgres=# \c thiru
+You are now connected to database "thiru" as user "postgres".
+thiru=# create schema CLASS;
+CREATE SCHEMA
+thiru=# CREATE TABLE CLASS .ONLINE1;
+ERROR:  syntax error at or near ";"
+LINE 1: CREATE TABLE CLASS .ONLINE1;
+                                   ^
+thiru=# create table class.online1;
+ERROR:  syntax error at or near ";"
+LINE 1: create table class.online1;
+                                  ^
+thiru=# create table class.online1(rollno int , name varchar(25) , age int , degree varchar(10) );
+CREATE TABLE
+thiru=# select *from class;
+ERROR:  relation "class" does not exist
+LINE 1: select *from class;
+                     ^
+thiru=# select *from online1;
+ERROR:  relation "online1" does not exist
+LINE 1: select *from online1;
+                     ^
+thiru=# select *from class.online1;
+ rollno | name | age | degree 
+--------+------+-----+--------
+(0 rows)
+
+thiru=# alter table class.online1
+thiru-# add column cgpa decimal;
+ALTER TABLE
+thiru=# select * from class.online1;
+ rollno | name | age | degree | cgpa 
+--------+------+-----+--------+------
+(0 rows)
+
+thiru=# alter table class.online1
+thiru-# drop colum age;
+ERROR:  syntax error at or near "age"
+LINE 2: drop colum age;
+                   ^
+thiru=# alter table class.online1
+drop column  age;
+ALTER TABLE
+thiru=# select*  from class.online1;
+ rollno | name | degree | cgpa 
+--------+------+--------+------
+(0 rows)
+
+thiru=# alter table class.online1
+thiru-# rename column name to "Student Name";
+ALTER TABLE
+thiru=# select * from class.online1;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+(0 rows)
+
+thiru=# values (101,'thiru','be'8.91);
+ERROR:  syntax error at or near "8.91"
+LINE 1: values (101,'thiru','be'8.91);
+                                ^
+thiru=# values (101,'thiru','be'"8.91");
+ERROR:  syntax error at or near ""8.91""
+LINE 1: values (101,'thiru','be'"8.91");
+                                ^
+thiru=# insert into class.online1
+thiru-# values (101,'thiru','be'8.91);
+ERROR:  syntax error at or near "8.91"
+LINE 2: values (101,'thiru','be'8.91);
+                                ^
+thiru=# insert into class.online1
+values (101,'thiru','be', "8.91");
+ERROR:  column "8.91" does not exist
+LINE 2: values (101,'thiru','be', "8.91");
+                                  ^
+thiru=# insert into class.online1
+values (101,'thiru','be', 8.91);
+INSERT 0 1
+thiru=# select* from class.online1;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+(1 row)
+
+thiru=# insert into class.online1
+thiru-# values( 102,"Hanu",'be', 8.91)(103,"Vijay","M.A",8.5)
+thiru-# ;
+ERROR:  syntax error at or near "("
+LINE 2: values( 102,"Hanu",'be', 8.91)(103,"Vijay","M.A",8.5)
+                                      ^
+thiru=# insert into class.online1
+values( 102,"Hanu",'be', 8.91),(103,"Vijay","M.A",8.5)
+;
+ERROR:  column "Hanu" does not exist
+LINE 2: values( 102,"Hanu",'be', 8.91),(103,"Vijay","M.A",8.5)
+                    ^
+thiru=# insert into class.online1
+( 102,"Hanu",'be', 8.91),(103,"Vijay","M.A",8.5)
+;
+ERROR:  syntax error at or near "102"
+LINE 2: ( 102,"Hanu",'be', 8.91),(103,"Vijay","M.A",8.5)
+          ^
+thiru=# insert into class.online1
+values( 102,'Hanu','be', 8.91),(103,'Vijay',"M.A",8.5)
+;
+ERROR:  column "M.A" does not exist
+LINE 2: values( 102,'Hanu','be', 8.91),(103,'Vijay',"M.A",8.5)
+                                                    ^
+thiru=# insert into class.online1
+values( 102,'Hanu','be', 8.91),(103,'Vijay','"M.A"',8.5)
+;
+INSERT 0 2
+thiru=# select * from class.online1;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+    102 | Hanu         | be     | 8.91
+    103 | Vijay        | "M.A"  |  8.5
+(3 rows)
+
+thiru=# update table class.online1
+thiru-# set degree= 'M.A'  where rollno = 103;
+ERROR:  syntax error at or near "table"
+LINE 1: update table class.online1
+               ^
+thiru=# update  class.online1
+set degree= 'M.A'  where rollno = 103;
+UPDATE 1
+thiru=# select * from class.online1;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+    102 | Hanu         | be     | 8.91
+    103 | Vijay        | M.A    |  8.5
+(3 rows)
+
+thiru=# insert into class.online1
+thiru-# (rollno , "Student Name") values (104 ,'Damo');
+INSERT 0 1
+thiru=# select * from class.online1;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+    102 | Hanu         | be     | 8.91
+    103 | Vijay        | M.A    |  8.5
+    104 | Damo         |        |     
+(4 rows)
+
+thiru=# alter table class.online1 rename to FullStack;
+ALTER TABLE
+thiru=# select * from class.FullStack;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+    102 | Hanu         | be     | 8.91
+    103 | Vijay        | M.A    |  8.5
+    104 | Damo         |        |     
+(4 rows)
+
+
+
+26.08.2023
+
+
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgres
+[sudo] password for gods:           
+postgres@gods-Nitro-AN515-57:~$ psql
+psql (14.9 (Ubuntu 14.9-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | postgres | UTF8     | en_IN   | en_IN | 
+ template0 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ thiru     | postgres | UTF8     | en_IN   | en_IN | 
+(4 rows)
+
+postgres=# \c thiru
+You are now connected to database "thiru" as user "postgres".
+thiru=# select * from class.online1
+thiru-# ;
+ERROR:  relation "class.online1" does not exist
+LINE 1: select * from class.online1
+                      ^
+thiru=# \dt
+Did not find any relations.
+thiru=# select * from class.fillstack
+;
+ERROR:  relation "class.fillstack" does not exist
+LINE 1: select * from class.fillstack
+                      ^
+thiru=# select * from class.fullstack
+;
+ rollno | Student Name | degree | cgpa 
+--------+--------------+--------+------
+    101 | thiru        | be     | 8.91
+    102 | Hanu         | be     | 8.91
+    103 | Vijay        | M.A    |  8.5
+    104 | Damo         |        |     
+(4 rows)
+
+thiru=# ALTER TABLE CLASS.FULLSTACK
+thiru-# ADD COLUMN LOCATION VARCHAR(50);
+ALTER TABLE
+thiru=# SELECT * FROM CLASS.FULLSTACK;
+ rollno | Student Name | degree | cgpa | location 
+--------+--------------+--------+------+----------
+    101 | thiru        | be     | 8.91 | 
+    102 | Hanu         | be     | 8.91 | 
+    103 | Vijay        | M.A    |  8.5 | 
+    104 | Damo         |        |      | 
+(4 rows)
+
+thiru=# ALTER TABLE CLASS FULLSTACK
+thiru-# ADD COLUMN AGE DECIMAL , ISEMPLOYEE BOOLEAN;
+ERROR:  syntax error at or near "FULLSTACK"
+LINE 1: ALTER TABLE CLASS FULLSTACK
+                          ^
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN AGE DECIMAL , ISEMPLOYEE BOOLEAN;
+ERROR:  syntax error at or near "ISEMPLOYEE"
+LINE 2: ADD COLUMN AGE DECIMAL , ISEMPLOYEE BOOLEAN;
+                                 ^
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN AGE DECIMAL ,ADD COLUMN ISEMPLOYEE BOOLEAN;
+ALTER TABLE
+thiru=# SELECT * FROM CLASS.FULLSTACK;
+ rollno | Student Name | degree | cgpa | location | age | isemployee 
+--------+--------------+--------+------+----------+-----+------------
+    101 | thiru        | be     | 8.91 |          |     | 
+    102 | Hanu         | be     | 8.91 |          |     | 
+    103 | Vijay        | M.A    |  8.5 |          |     | 
+    104 | Damo         |        |      |          |     | 
+(4 rows)
+
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN MOBILENUMBER INT;
+ALTER TABLE
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN EMAIL VARCHAR(80);
+ALTER TABLE
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN NEEDMOCK BOOLEAN;
+ALTER TABLE
+thiru=# SELEXT * FROM CLASS.FULSTACK;
+ERROR:  syntax error at or near "SELEXT"
+LINE 1: SELEXT * FROM CLASS.FULSTACK;
+        ^
+thiru=# SELECT * FROM CLASS.FULSTACK;
+ERROR:  relation "class.fulstack" does not exist
+LINE 1: SELECT * FROM CLASS.FULSTACK;
+                      ^
+thiru=# SELECT * FROM CLASS.FULLSTACK;
+ rollno | Student Name | degree | cgpa | location | age | isemployee | mobilenumber | email | needmock 
+--------+--------------+--------+------+----------+-----+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |     |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |     |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |     |            |              |       | 
+    104 | Damo         |        |      |          |     |            |              |       | 
+(4 rows)
+
+thiru=# ALTER TABLE CLASS.FULLSTACK
+thiru-# RENAME COLUMN AGE TO DATEOFBIRTH;
+ALTER TABLE
+thiru=# SELECT*FROM CLASS.FULLSTACK;
+ rollno | Student Name | degree | cgpa | location | dateofbirth | isemployee | mobilenumber | email | needmock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# ALTER TABLE CLASS.FULLSTACK;
+ERROR:  syntax error at or near ";"
+LINE 1: ALTER TABLE CLASS.FULLSTACK;
+                                   ^
+thiru=# ALTER TABLE CLASS.FULLSTACK
+thiru-# ADD COLUMN DATEOFBIRTH TYPE DATE;
+ERROR:  syntax error at or near "DATE"
+LINE 2: ADD COLUMN DATEOFBIRTH TYPE DATE;
+                                    ^
+thiru=# ALTER TABLE CLASS.FULLSTACK
+ADD COLUMN DATEOFBIRTH TYPE YYYY;
+ERROR:  syntax error at or near "YYYY"
+LINE 2: ADD COLUMN DATEOFBIRTH TYPE YYYY;
+                                    ^
+thiru=# ^C
+thiru=# 
+
+
+27.08.2023
+
+
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgrest
+sudo: unknown user postgrest
+sudo: error initializing audit plugin sudoers_audit
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgres
+[sudo] password for gods:           
+postgres@gods-Nitro-AN515-57:~$ psql
+psql (14.9 (Ubuntu 14.9-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# psql
+postgres-# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | postgres | UTF8     | en_IN   | en_IN | 
+ template0 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ thiru     | postgres | UTF8     | en_IN   | en_IN | 
+(4 rows)
+
+postgres-# \c thiru
+You are now connected to database "thiru" as user "postgres".
+thiru-# select * from class.fullstack;
+ERROR:  syntax error at or near "psql"
+LINE 1: psql
+        ^
+thiru=# select * from class.fullstack;
+ rollno | Student Name | degree | cgpa | location | dateofbirth | isemployee | mobilenumber | email | needmock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack
+thiru-# rename column needmock to "NeedMock";
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | degree | cgpa | location | dateofbirth | isemployee | mobilenumber | email | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack 
+thiru-# rename column cgpa to "CGPA";
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | degree | CGPA | location | dateofbirth | isemployee | mobilenumber | email | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack
+thiru-# rename column location to "Location";
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | email | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack 
+thiru-# rename column degree to "Degree"
+thiru-# rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near "rename"
+LINE 3: rename column isemployee to "Isempolyee";
+        ^
+thiru=# alter table class.fullstack 
+rename column degree to "Degree",
+rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near ","
+LINE 2: rename column degree to "Degree",
+                                        ^
+thiru=# alter table class.fullstack 
+thiru-# rename column degree to "Degree"
+thiru-# ,
+thiru-# rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near ","
+LINE 3: ,
+        ^
+thiru=# select * from class.fullstack;
+ rollno | Student Name | degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | email | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack 
+thiru-#  rename column degree to "Degree" ,
+thiru-# rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near ","
+LINE 3:  rename column degree to "Degree" ,
+                                          ^
+thiru=# alter table class.fullstack 
+ rename column degree to "Degree" ,
+rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near ","
+LINE 2:  rename column degree to "Degree" ,
+                                          ^
+thiru=# alter table class.fullstack 
+ rename column degree to "Degree"  
+rename column isemployee to "Isempolyee";
+ERROR:  syntax error at or near "rename"
+LINE 3: rename column isemployee to "Isempolyee";
+        ^
+thiru=# alter table class.fullstack 
+ rename column degree to "Degree" ;
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | email | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+-------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              |       | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              |       | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              |       | 
+    104 | Damo         |        |      |          |             |            |              |       | 
+(4 rows)
+
+thiru=# alter table class.fullstack 
+thiru-# drop email;
+ALTER TABLE
+thiru=# select * from class.fullStack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------
+    101 | thiru        | be     | 8.91 |          |             |            |              | 
+    102 | Hanu         | be     | 8.91 |          |             |            |              | 
+    103 | Vijay        | M.A    |  8.5 |          |             |            |              | 
+    104 | Damo         |        |      |          |             |            |              | 
+(4 rows)
+
+thiru=# alter table class.fullstack
+thiru-# truncate rollno;
+ERROR:  syntax error at or near "truncate"
+LINE 2: truncate rollno;
+        ^
+thiru=# alter table class.fullstack
+"Truncate"  rollno;
+ERROR:  syntax error at or near ""Truncate""
+LINE 2: "Truncate"  rollno;
+        ^
+thiru=# alter table class.fullstack
+truncate rollno;
+ERROR:  syntax error at or near "truncate"
+LINE 2: truncate rollno;
+        ^
+thiru=# alter table class.fullstack
+truncate class.fullstack  rollno;
+ERROR:  syntax error at or near "truncate"
+LINE 2: truncate class.fullstack  rollno;
+        ^
+thiru=# alter table class.fullstack
+truncate class.fullstack ;
+ERROR:  syntax error at or near "truncate"
+LINE 2: truncate class.fullstack ;
+        ^
+thiru=# truncte table class.fullstack;
+ERROR:  syntax error at or near "truncte"
+LINE 1: truncte table class.fullstack;
+        ^
+thiru=# truncate table class.fullstack;
+TRUNCATE TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------
+(0 rows)
+
+thiru=# 
+thiru=# alter table class.fullstack
+thiru-# add column "NumberOfBlogs" shotint;
+ERROR:  type "shotint" does not exist
+LINE 2: add column "NumberOfBlogs" shotint;
+                                   ^
+thiru=# alter table class.fullstack
+add column "NumberOfBlogs" smallint;
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock | NumberOfBlogs 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------+---------------
+(0 rows)
+
+thiru=# alter table class.fullstack 
+thiru-# drop column "NumberOfBlogs";
+ALTER TABLE
+thiru=# select table * from class.fullstack;
+ERROR:  syntax error at or near "table"
+LINE 1: select table * from class.fullstack;
+               ^
+thiru=# select  * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------
+(0 rows)
+
+thiru=# alter table class.fullstack
+thiru-# add column NoOfBlogs smallINT;
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------+-----------
+(0 rows)
+
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgres
+[sudo] password for gods:           
+postgres@gods-Nitro-AN515-57:~$ psql 
+psql (14.9 (Ubuntu 14.9-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | postgres | UTF8     | en_IN   | en_IN | 
+ template0 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ thiru     | postgres | UTF8     | en_IN   | en_IN | 
+(4 rows)
+
+postgres=# \c thiru
+You are now connected to database "thiru" as user "postgres".
+thiru=# select * from class.fullstack;
+thiru=# 
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------+-----------
+(0 rows)
+
+thiru=# create table class.java;
+ERROR:  syntax error at or near ";"
+LINE 1: create table class.java;
+                               ^
+thiru=# create table class.java(isemployee bool);
+CREATE TABLE
+thiru=# select * from class.java
+thiru-# ;
+ isemployee 
+------------
+(0 rows)
+
+thiru=# insert into class.java 
+thiru-# values(true)
+thiru-#  
+thiru-# ;
+INSERT 0 1
+thiru=# select * from class.java;
+ isemployee 
+------------
+ t
+(1 row)
+
+thiru=# alter table class.java 
+thiru-# add colum name char(12)
+thiru-# select * from class.java;
+ERROR:  syntax error at or near "char"
+LINE 2: add colum name char(12)
+                       ^
+thiru=# alter table class.java add column name char(12)
+thiru-# add colum fathername varchar(20)
+thiru-# add column mothername text; 
+ERROR:  syntax error at or near "add"
+LINE 2: add colum fathername varchar(20)
+        ^
+thiru=# alter table class.java add column name char(12)
+add column fathername varchar(20)
+add column mothername text; 
+ERROR:  syntax error at or near "add"
+LINE 2: add column fathername varchar(20)
+        ^
+thiru=# alter table class.java add column name char(12),
+add column fathername varchar(20),
+add column mothername text; 
+ALTER TABLE
+thiru=# select * from class.java;
+ isemployee | name | fathername | mothername 
+------------+------+------------+------------
+ t          |      |            | 
+(1 row)
+
+thiru=# insert into class.java values (false,'Thiru','Rajendran','Selvi');
+INSERT 0 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername 
+------------+--------------+------------+------------
+ t          |              |            | 
+ f          | Thiru        | Rajendran  | Selvi
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# add column mobileno int;
+ALTER TABLE
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | mobileno 
+------------+--------------+------------+------------+----------
+ t          |              |            |            |         
+ f          | Thiru        | Rajendran  | Selvi      |         
+(2 rows)
+
+thiru=# update table class.java
+thiru-# set mobileno = 8825139858 where name = thiru;
+ERROR:  syntax error at or near "table"
+LINE 1: update table class.java
+               ^
+thiru=# update class.java
+set mobileno = 8825139858 where name = thiru;
+ERROR:  column "thiru" does not exist
+LINE 2: set mobileno = 8825139858 where name = thiru;
+                                               ^
+thiru=# update class.java
+set mobileno = 8825139858 where name ='thiru';
+ERROR:  integer out of range
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | mobileno 
+------------+--------------+------------+------------+----------
+ t          |              |            |            |         
+ f          | Thiru        | Rajendran  | Selvi      |         
+(2 rows)
+
+thiru=# update class.java
+set mobileno = 8825139858 where name ='thiru';
+ERROR:  integer out of range
+thiru=# update class.java
+thiru-# 
+thiru-# ;
+ERROR:  syntax error at or near ";"
+LINE 2: ;
+        ^
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | mobileno 
+------------+--------------+------------+------------+----------
+ t          |              |            |            |         
+ f          | Thiru        | Rajendran  | Selvi      |         
+(2 rows)
+
+thiru=# update class.java
+set mobileno = 8825139858 where name ='thiru';
+ERROR:  integer out of range
+thiru=# alter table class.java 
+thiru-# alter column mobileno type bigint;
+ALTER TABLE
+thiru=# update class.java
+set mobileno = 8825139858 where name ='thiru';
+UPDATE 0
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | mobileno 
+------------+--------------+------------+------------+----------
+ t          |              |            |            |         
+ f          | Thiru        | Rajendran  | Selvi      |         
+(2 rows)
+
+thiru=# update class.java
+set mobileno = 8825139858 where name ='Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername |  mobileno  
+------------+--------------+------------+------------+------------
+ t          |              |            |            |           
+ f          | Thiru        | Rajendran  | Selvi      | 8825139858
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# add column dateofBirth date;
+ALTER TABLE
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername |  mobileno  | dateofbirth 
+------------+--------------+------------+------------+------------+-------------
+ t          |              |            |            |            | 
+ f          | Thiru        | Rajendran  | Selvi      | 8825139858 | 
+(2 rows)
+
+thiru=# insert into class.java
+thiru-# set dateofbirth = 2002-05-25 where name = 'Thiru';
+ERROR:  syntax error at or near "set"
+LINE 2: set dateofbirth = 2002-05-25 where name = 'Thiru';
+        ^
+thiru=# update class.java
+set dateofbirth = 2002-05-25 where name = 'Thiru';
+ERROR:  column "dateofbirth" is of type date but expression is of type integer
+LINE 2: set dateofbirth = 2002-05-25 where name = 'Thiru';
+                          ^
+HINT:  You will need to rewrite or cast the expression.
+thiru=# update class.java
+set dateofbirth ='2002-05-25' where name = 'Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername |  mobileno  | dateofbirth 
+------------+--------------+------------+------------+------------+-------------
+ t          |              |            |            |            | 
+ f          | Thiru        | Rajendran  | Selvi      | 8825139858 | 2002-05-25
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# add column dateofjoining date not null default current_date;
+ALTER TABLE
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername |  mobileno  | dateofbirth | dateofjoining 
+------------+--------------+------------+------------+------------+-------------+---------------
+ t          |              |            |            |            |             | 2023-08-28
+ f          | Thiru        | Rajendran  | Selvi      | 8825139858 | 2002-05-25  | 2023-08-28
+(2 rows)
+
+thiru=# update class.java 
+thiru-# set dateofjoining ='2023-05-22' where name = 'Thiru'; 
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername |  mobileno  | dateofbirth | dateofjoining 
+------------+--------------+------------+------------+------------+-------------+---------------
+ t          |              |            |            |            |             | 2023-08-28
+ f          | Thiru        | Rajendran  | Selvi      | 8825139858 | 2002-05-25  | 2023-05-22
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# drop mobileno;
+ALTER TABLE
+thiru=# select * from java.class;
+ERROR:  relation "java.class" does not exist
+LINE 1: select * from java.class;
+                      ^
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining 
+------------+--------------+------------+------------+-------------+---------------
+ t          |              |            |            |             | 2023-08-28
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# add column classtime time;
+ALTER TABLE
+thiru=# selcet * from class.java;
+ERROR:  syntax error at or near "selcet"
+LINE 1: selcet * from class.java;
+        ^
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+------------+-------------+---------------+-----------
+ t          |              |            |            |             | 2023-08-28    | 
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 
+(2 rows)
+
+thiru=# update class.java
+thiru-# set classtime = '07:00:00' where name = 'Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+------------+-------------+---------------+-----------
+ t          |              |            |            |             | 2023-08-28    | 
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 07:00:00
+(2 rows)
+
+thiru=# update class.java
+set classtime = '07:00:' where name = 'Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+------------+-------------+---------------+-----------
+ t          |              |            |            |             | 2023-08-28    | 
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 07:00:00
+(2 rows)
+
+thiru=# update class.java
+set classtime = '07:00' where name = 'Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+------------+-------------+---------------+-----------
+ t          |              |            |            |             | 2023-08-28    | 
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 07:00:00
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# alter column class type time not null default current_time;
+ERROR:  syntax error at or near "not"
+LINE 2: alter column class type time not null default current_time;
+                                     ^
+thiru=# update class.java
+thiru-# set classtime = select current_time ;
+ERROR:  syntax error at or near "select"
+LINE 2: set classtime = select current_time ;
+                        ^
+thiru=# update class.java
+set classtime =  current_time ;
+UPDATE 2
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining |    classtime    
+------------+--------------+------------+------------+-------------+---------------+-----------------
+ t          |              |            |            |             | 2023-08-28    | 11:13:56.747562
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 11:13:56.747562
+(2 rows)
+
+thiru=# select name , dateofbirth,fathername from class.java;
+     name     | dateofbirth | fathername 
+--------------+-------------+------------
+              |             | 
+ Thiru        | 2002-05-25  | Rajendran
+(2 rows)
+
+thiru=# inset into values (false,'Vijay','Raja','Pooja','2002-03-20','','073000';
+thiru(# 
+ isemployee |     name     | fathername | mothername | dateofbirth | dateofjoining |    classtime    
+------------+--------------+------------+------------+-------------+---------------+-----------------
+ t          |              |            |            |             | 2023-08-28    | 11:13:56.747562
+ f          | Thiru        | Rajendran  | Selvi      | 2002-05-25  | 2023-05-22    | 11:13:56.747562
+(2 rows)
+
+thiru=# alter table class.java
+thiru-# drop mothername , father name ,dateofjoining
+thiru-# ;
+ERROR:  syntax error at or near "father"
+LINE 2: drop mothername , father name ,dateofjoining
+                          ^
+thiru=# alter table class.java
+drop mothername , fathername ,dateofjoining
+;
+ERROR:  syntax error at or near "fathername"
+LINE 2: drop mothername , fathername ,dateofjoining
+                          ^
+thiru=# alter table class.java
+drop mothername ;
+ALTER TABLE
+thiru=# select from * class.java;
+ERROR:  syntax error at or near "*"
+LINE 1: select from * class.java;
+                    ^
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining |    classtime    
+------------+--------------+------------+-------------+---------------+-----------------
+ t          |              |            |             | 2023-08-28    | 11:13:56.747562
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 11:13:56.747562
+(2 rows)
+
+thiru=# update class.java
+thiru-# drop column where isemployee = 'true';
+ERROR:  syntax error at or near "column"
+LINE 2: drop column where isemployee = 'true';
+             ^
+thiru=# delete from class.java where isemployee='t';
+DELETE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining |    classtime    
+------------+--------------+------------+-------------+---------------+-----------------
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 11:13:56.747562
+(1 row)
+
+thiru=# update class.java
+thiru-# set classtime = 070000 where name = 'Thiru';
+ERROR:  column "classtime" is of type time without time zone but expression is of type integer
+LINE 2: set classtime = 070000 where name = 'Thiru';
+                        ^
+HINT:  You will need to rewrite or cast the expression.
+thiru=# update class.java
+set classtime ='070000' where name = 'Thiru';
+UPDATE 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+-------------+---------------+-----------
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 07:00:00
+(1 row)
+
+thiru=# insert into class.java
+thiru-# values(true,'Vijay','Raja','2002-03-20','2023-08-18','050000');
+INSERT 0 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+-------------+---------------+-----------
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 07:00:00
+ t          | Vijay        | Raja       | 2002-03-20  | 2023-08-18    | 05:00:00
+(2 rows)
+
+thiru=# insert into class.java (name,fathername)
+thiru-# values('Hanu','Ravi');
+INSERT 0 1
+thiru=# select * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+-------------+---------------+-----------
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 07:00:00
+ t          | Vijay        | Raja       | 2002-03-20  | 2023-08-18    | 05:00:00
+            | Hanu         | Ravi       |             | 2023-08-28    | 
+(3 rows)
+
+thiru=# 
+gods@gods-Nitro-AN515-57:~$ sudo -i -u postgres
+[sudo] password for gods:           
+postgres@gods-Nitro-AN515-57:~$ psql
+psql (14.9 (Ubuntu 14.9-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# \c thiru 
+You are now connected to database "thiru" as user "postgres".
+thiru=# select  * from class.java;
+ isemployee |     name     | fathername | dateofbirth | dateofjoining | classtime 
+------------+--------------+------------+-------------+---------------+-----------
+ f          | Thiru        | Rajendran  | 2002-05-25  | 2023-05-22    | 07:00:00
+ t          | Vijay        | Raja       | 2002-03-20  | 2023-08-18    | 05:00:00
+            | Hanu         | Ravi       |             | 2023-08-28    | 
+(3 rows)
+
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | dateofbirth | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+----------+-------------+------------+--------------+----------+-----------
+(0 rows)
+
+thiru=# insert into class.fullstack 
+thiru-# values (1,'Thiru','B.E',8.91,'Thiruvarur','2002-05-25',false,8825985813,true,53);
+ERROR:  invalid input syntax for type numeric: "2002-05-25"
+LINE 2: values (1,'Thiru','B.E',8.91,'Thiruvarur','2002-05-25',false...
+                                                  ^
+thiru=# alter class.fullstack
+thiru-# alter column dateofbirth type date;
+ERROR:  syntax error at or near "class"
+LINE 1: alter class.fullstack
+              ^
+thiru=# alter table  class.fullstack
+alter column dateofbirth type date;
+ERROR:  column "dateofbirth" cannot be cast automatically to type date
+HINT:  You might need to specify "USING dateofbirth::date".
+thiru=# alter table  class.fullstack
+alter column dateofbirth type date;
+ERROR:  column "dateofbirth" cannot be cast automatically to type date
+HINT:  You might need to specify "USING dateofbirth::date".
+thiru=# insert into class.fullstack 
+values (1,'Thiru','B.E',8.91,'Thiruvarur','2002-05-25',false,8825985813,true,53);
+ERROR:  invalid input syntax for type numeric: "2002-05-25"
+LINE 2: values (1,'Thiru','B.E',8.91,'Thiruvarur','2002-05-25',false...
+                                                  ^
+thiru=# insert into class.fullstack 
+values (1,'Thiru','B.E',8.91,'Thiruvarur',2002-05-25,false,8825985813,true,53);
+ERROR:  integer out of range
+thiru=# alter table  class.fullstack
+alter column dateofbirth type date;
+ERROR:  column "dateofbirth" cannot be cast automatically to type date
+HINT:  You might need to specify "USING dateofbirth::date".
+thiru=# alter table class.fullstack 
+thiru-# alter column dateofbirth type date;
+ERROR:  column "dateofbirth" cannot be cast automatically to type date
+HINT:  You might need to specify "USING dateofbirth::date".
+thiru=# alter table class.fullstack 
+alter column dateofbirth type bigint;
+ALTER TABLE
+thiru=# alter table class.fullstack 
+alter column dateofbirth type date;
+ERROR:  column "dateofbirth" cannot be cast automatically to type date
+HINT:  You might need to specify "USING dateofbirth::date".
+thiru=# ^C
+thiru=# alter table class.fullstack
+thiru-# drop dateofbirth;
+ALTER TABLE
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA | Location | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+----------+------------+--------------+----------+-----------
+(0 rows)
+
+thiru=# insert into class.fullstack 
+values (1,'Thiru','B.E',8.91,'Thiruvarur',false,8825985813,true,53);
+ERROR:  integer out of range
+thiru=# alter table class.fullstack 
+thiru-# alter column mobilenumber type bigint;
+ALTER TABLE
+thiru=# insert into class.fullstack 
+values (1,'Thiru','B.E',8.91,'Thiruvarur',false,8825985813,true,53);
+INSERT 0 1
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+(1 row)
+
+thiru=# insert into class.fullstack
+thiru-# values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42);
+thiru(# );
+ERROR:  syntax error at or near ";"
+LINE 2: ...ues((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42);
+                                                                      ^
+thiru=# insert into class.fullstack
+values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42),(3,'Hanu','M.E',8.75,'Thanjavur',true,456011453,true,102),
+);
+ERROR:  syntax error at or near ")"
+LINE 3: );
+        ^
+thiru=# insert into class.fullstack
+values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42),(3,'Hanu','M.E',8.75,'Thanjavur',true,456011453,true,102) 
+);
+ERROR:  column "rollno" is of type integer but expression is of type record
+LINE 2: values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,4...
+               ^
+HINT:  You will need to rewrite or cast the expression.
+thiru=# insert into class.fullstack
+values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42),(3,'Hanu','M.E',8.75,'Thanjavur',true,456011453,true,102)
+);
+ERROR:  column "rollno" is of type integer but expression is of type record
+LINE 2: values((2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,4...
+               ^
+HINT:  You will need to rewrite or cast the expression.
+thiru=# insert into class.fullstack
+values(2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42);
+INSERT 0 1
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+      2 | Vijay        | M.A    |  8.5 | Chennai    | f          |    975011453 | t        |        42
+(2 rows)
+
+thiru=# insert into class.fullstack
+values(2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42),(2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42);
+INSERT 0 2
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+      2 | Vijay        | M.A    |  8.5 | Chennai    | f          |    975011453 | t        |        42
+      2 | Vijay        | M.A    |  8.5 | Chennai    | f          |    975011453 | t        |        42
+      2 | Vijay        | M.A    |  8.5 | Chennai    | f          |    975011453 | t        |        42
+(4 rows)
+
+thiru=# delete class.fullstack where rollno = 2;
+ERROR:  syntax error at or near "class"
+LINE 1: delete class.fullstack where rollno = 2;
+               ^
+thiru=# delete table class.fullstack where rollno = 2;
+ERROR:  syntax error at or near "table"
+LINE 1: delete table class.fullstack where rollno = 2;
+               ^
+thiru=# delete from  class.fullstack where rollno = 2;
+DELETE 3
+thiru=# insert into class.fullstack
+values(2,'Vijay','M.A',8.5,'Chennai',false,975011453,true,42),(3,'Hanu','M.E',8.75,'Thanjavur',true,456011453,true,102)
+;
+INSERT 0 2
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+      2 | Vijay        | M.A    |  8.5 | Chennai    | f          |    975011453 | t        |        42
+      3 | Hanu         | M.E    | 8.75 | Thanjavur  | t          |    456011453 | t        |       102
+(3 rows)
+
+thiru=# insert into class.fullstack
+values(5,'Harini','B.C.A',8.0,'Thiruvaur',false,9750111453,true,72),(4,'kaviya','B.A',9.75,'Kanchipuram',true,786011453,false,62)
+;
+INSERT 0 2
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur  | f          |   8825985813 | t        |        53
+      2 | Vijay        | M.A    |  8.5 | Chennai     | f          |    975011453 | t        |        42
+      3 | Hanu         | M.E    | 8.75 | Thanjavur   | t          |    456011453 | t        |       102
+      5 | Harini       | B.C.A  |  8.0 | Thiruvaur   | f          |   9750111453 | t        |        72
+      4 | kaviya       | B.A    | 9.75 | Kanchipuram | t          |    786011453 | f        |        62
+(5 rows)
+
+thiru=# insert into class.fullstack
+values(6,'Vicky','B.E',7.89,'Salem',true,75650111453,true,172),(7,'Gobi','D.M.E',9.50,'Kanchipuram',true,7486011453,true,86)
+;
+INSERT 0 2
+thiru=# select * from class.fullstack;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur  | f          |   8825985813 | t        |        53
+      2 | Vijay        | M.A    |  8.5 | Chennai     | f          |    975011453 | t        |        42
+      3 | Hanu         | M.E    | 8.75 | Thanjavur   | t          |    456011453 | t        |       102
+      5 | Harini       | B.C.A  |  8.0 | Thiruvaur   | f          |   9750111453 | t        |        72
+      4 | kaviya       | B.A    | 9.75 | Kanchipuram | t          |    786011453 | f        |        62
+      6 | Vicky        | B.E    | 7.89 | Salem       | t          |  75650111453 | t        |       172
+      7 | Gobi         | D.M.E  | 9.50 | Kanchipuram | t          |   7486011453 | t        |        86
+(7 rows)
+
+thiru=# select * from class.fullstack where noofblogs>50;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur  | f          |   8825985813 | t        |        53
+      3 | Hanu         | M.E    | 8.75 | Thanjavur   | t          |    456011453 | t        |       102
+      5 | Harini       | B.C.A  |  8.0 | Thiruvaur   | f          |   9750111453 | t        |        72
+      4 | kaviya       | B.A    | 9.75 | Kanchipuram | t          |    786011453 | f        |        62
+      6 | Vicky        | B.E    | 7.89 | Salem       | t          |  75650111453 | t        |       172
+      7 | Gobi         | D.M.E  | 9.50 | Kanchipuram | t          |   7486011453 | t        |        86
+(6 rows)
+
+thiru=# select * from class.fullstack where noofblogs>80;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      3 | Hanu         | M.E    | 8.75 | Thanjavur   | t          |    456011453 | t        |       102
+      6 | Vicky        | B.E    | 7.89 | Salem       | t          |  75650111453 | t        |       172
+      7 | Gobi         | D.M.E  | 9.50 | Kanchipuram | t          |   7486011453 | t        |        86
+(3 rows)
+
+thiru=# select * from class.fullstack where noofblogs between 50 and 100 ;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur  | f          |   8825985813 | t        |        53
+      5 | Harini       | B.C.A  |  8.0 | Thiruvaur   | f          |   9750111453 | t        |        72
+      4 | kaviya       | B.A    | 9.75 | Kanchipuram | t          |    786011453 | f        |        62
+      7 | Gobi         | D.M.E  | 9.50 | Kanchipuram | t          |   7486011453 | t        |        86
+(4 rows)
+
+thiru=# select * from class.fullstack where rollno(1,3,8) ;
+ERROR:  function rollno(integer, integer, integer) does not exist
+LINE 1: select * from class.fullstack where rollno(1,3,8) ;
+                                            ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+thiru=# select * from class.fullstack where rollno in (1,3,8) ;
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+      3 | Hanu         | M.E    | 8.75 | Thanjavur  | t          |    456011453 | t        |       102
+(2 rows)
+
+thiru=# =select "Student Name" , "CGPA",ISEMPLOYEE;
+ERROR:  syntax error at or near "="
+LINE 1: =select "Student Name" , "CGPA",ISEMPLOYEE;
+        ^
+thiru=# =select "Student Name" , "CGPA",ISEMPLOYEE FROM CLASS.FULLSTACJ;
+ERROR:  syntax error at or near "="
+LINE 1: =select "Student Name" , "CGPA",ISEMPLOYEE FROM CLASS.FULLST...
+        ^
+thiru=# =select "Student Name" , "CGPA",ISEMPLOYEE FROM CLASS.FULLSTACK;
+ERROR:  syntax error at or near "="
+LINE 1: =select "Student Name" , "CGPA",ISEMPLOYEE FROM CLASS.FULLST...
+        ^
+thiru=# =select Student Name , CGPA,ISEMPLOYEE FROM CLASS.FULLSTACK;
+ERROR:  syntax error at or near "="
+LINE 1: =select Student Name , CGPA,ISEMPLOYEE FROM CLASS.FULLSTACK;
+        ^
+thiru=# select isemployee from class.fullstack;
+ isemployee 
+------------
+ f
+ f
+ t
+ f
+ t
+ t
+ t
+(7 rows)
+
+thiru=# select isemployee, CGPA from class.fullstack;
+ERROR:  column "cgpa" does not exist
+LINE 1: select isemployee, CGPA from class.fullstack;
+                           ^
+thiru=# select isemployee, "CGPA" from class.fullstack;
+ isemployee | CGPA 
+------------+------
+ f          | 8.91
+ f          |  8.5
+ t          | 8.75
+ f          |  8.0
+ t          | 9.75
+ t          | 7.89
+ t          | 9.50
+(7 rows)
+
+thiru=# select "Student Name",isemployee, "CGPA" from class.fullstack;
+ Student Name | isemployee | CGPA 
+--------------+------------+------
+ Thiru        | f          | 8.91
+ Vijay        | f          |  8.5
+ Hanu         | t          | 8.75
+ Harini       | f          |  8.0
+ kaviya       | t          | 9.75
+ Vicky        | t          | 7.89
+ Gobi         | t          | 9.50
+(7 rows)
+
+thiru=# select * from class.java where "CGPA" >9.00 ;
+ERROR:  column "CGPA" does not exist
+LINE 1: select * from class.java where "CGPA" >9.00 ;
+                                       ^
+thiru=# select * from class.java where CGPA >9.00 ;
+ERROR:  column "cgpa" does not exist
+LINE 1: select * from class.java where CGPA >9.00 ;
+                                       ^
+thiru=# select * from class.java where CGPA >9 ;
+ERROR:  column "cgpa" does not exist
+LINE 1: select * from class.java where CGPA >9 ;
+                                       ^
+thiru=# select * from class.fullstack  where "CGPA" >9.00 ;
+ rollno | Student Name | Degree | CGPA |  Location   | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-------------+------------+--------------+----------+-----------
+      4 | kaviya       | B.A    | 9.75 | Kanchipuram | t          |    786011453 | f        |        62
+      7 | Gobi         | D.M.E  | 9.50 | Kanchipuram | t          |   7486011453 | t        |        86
+(2 rows)
+
+thiru=# select * from class.fullstack "Student Name" like (%ru%);
+ERROR:  syntax error at or near "like"
+LINE 1: select * from class.fullstack "Student Name" like (%ru%);
+                                                     ^
+thiru=# select * from class.fullstack "Student Name" like ('%ru%');
+ERROR:  syntax error at or near "like"
+LINE 1: select * from class.fullstack "Student Name" like ('%ru%');
+                                                     ^
+thiru=# select * from class.fullstack where  "Student Name" like ('%ru%');
+ rollno | Student Name | Degree | CGPA |  Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+------------+------------+--------------+----------+-----------
+      1 | Thiru        | B.E    | 8.91 | Thiruvarur | f          |   8825985813 | t        |        53
+(1 row)
+
+thiru=# select * from class.fullstack where  "Student Name" like ('H%');
+ rollno | Student Name | Degree | CGPA | Location  | isemployee | mobilenumber | NeedMock | noofblogs 
+--------+--------------+--------+------+-----------+------------+--------------+----------+-----------
+      3 | Hanu         | M.E    | 8.75 | Thanjavur | t          |    456011453 | t        |       102
+      5 | Harini       | B.C.A  |  8.0 | Thiruvaur | f          |   9750111453 | t        |        72
+(2 rows)
+
+thiru=# SELECT * FROM CLASS.FULLSTACK  group by degree;
+ERROR:  column "degree" does not exist
+LINE 1: SELECT * FROM CLASS.FULLSTACK  group by degree;
+                                                ^
+HINT:  Perhaps you meant to reference the column "fullstack.Degree".
+thiru=# SELECT * FROM CLASS.FULLSTACK  group by "Degree";
+ERROR:  column "fullstack.rollno" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: SELECT * FROM CLASS.FULLSTACK  group by "Degree";
+               ^
+thiru=# SELECT rollno  FROM CLASS.FULLSTACK  group by "Degree";
+ERROR:  column "fullstack.rollno" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: SELECT rollno  FROM CLASS.FULLSTACK  group by "Degree";
+               ^
+thiru=# 
+
+

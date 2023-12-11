@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Demo</title>
+</head>
+<body>
+
+    <form action="Table.html" method="post"> 
+
+        <div>
+            <label for="uname">User Name</label>
+            <input type="text" id="uname" name="UserName " maxlength="20" placeholder="Enter Your Name" required pattern="[^\\d]"> 
+        </div>
+
+       <div>
+        <label for="pwd">Password</label>
+        <input type="password" id="pwd" name="Password " required>
+       </div>
+       <div>
+        <label for="Email">Email</label>
+        <input type="email" id="email" name="Email" autocomplete="off">
+       </div>
+
+
+       <div>
+        <label for="">Number</label>
+        <input type="number" max="30" step="5">
+       </div>
+
+       <div>
+        <label for="">Date Of Birth</label>
+        <input type="date" name="" id="">
+       </div>
+
+       <div>
+        <input type="radio" name="Gender" id="" value="Male">
+        <label for="" >Male</label>
+
+        <input type="radio" name="Gender" id="" value="Female">
+        <label for="" >Female</label>
+
+        <input type="radio" name="Gender" id="" value="Others">
+        <label for="" >Others</label>
+        
+       </div>
+        
+       <div>
+        <input type="checkbox">
+        <label for="">I agree terms & condition</label>
+       </div>
+
+       <div>
+        <label for="">Comment</label>
+        <textarea name="" id="" cols="50" rows="10"></textarea>
+       </div>
+
+       <div>
+        <select name="" id="">
+            <option value="">Select</option>
+            <option value="HTML">HTML</option>
+            <option value="Css">Css</option>
+            <option value="Js">Js</option>
+            <option value="Java">Java</option>
+        </select>
+       </div>
+
+
+       <div>
+
+        <label for="">Mobile Number</label>
+        <input type="tel" maxlength="10" minlength="10" pattern="[0-9]{10}">
+       </div>
+
+       <div>
+        <button type="submit">Login</button>
+        <button type="reset">Reset</button>
+       </div>
+
+
+    </form>
+    
+</body>
+</html>
